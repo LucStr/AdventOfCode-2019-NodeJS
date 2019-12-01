@@ -1,0 +1,25 @@
+{
+  "name": "adventofcode-2019-nodejs",
+  "version": "1.0.0",
+  "description": "My approach to solving the challenges from advent of code for the year 2019 in NodeJS https://adventofcode.com/",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "load": "node setup_day.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucStr/AdventOfCode-2019-NodeJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucStr/AdventOfCode-2019-NodeJS/issues"
+  },
+  "homepage": "https://github.com/LucStr/AdventOfCode-2019-NodeJS#readme",
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "request": "^2.88.0",
+    "squirrelly": "^7.9.0"
+  }
+}
