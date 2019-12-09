@@ -3,6 +3,7 @@ const IntCodeComputer = function (dataInput, continueOnOutput){
     this.inputIndex = 0;
     this.inputData = [];
     this.index = 0;
+    this.relativeBase = 0;
     this.continueOnOutput = continueOnOutput ? true : false;
 }
 
@@ -15,7 +16,6 @@ IntCodeComputer.prototype.addInput = function(input){
 }
 
 IntCodeComputer.prototype.run = function(){
-    this.index;
     var parameterConfig = [];
     var output = [];
     var data = this.data;
@@ -48,6 +48,7 @@ IntCodeComputer.prototype.run = function(){
                 if(!this.continueOnOutput){
                     return output;
                 }
+                break;
             case 5:
                 jumpIfTrue();
                 break;
@@ -60,11 +61,14 @@ IntCodeComputer.prototype.run = function(){
             case 8:
                 assignEqualTo();
                 break;
+            case 9:
+                offsetRelativeBase();
+                break;
             case 99:
                 
                 break;
             default:
-                console.log("SOMETHING WENT WRONG:", data[index], opCode)
+                console.log("SOMETHING WENT WRONG:", data[this.index], opCode)
         }
     
         if(data[this.index] == 99){
@@ -78,18 +82,26 @@ IntCodeComputer.prototype.run = function(){
         if(parameterConfig[pos - 1] == 1){
             return that.index + pos;
         }
+        else if(parameterConfig[pos - 1] == 2){
+            return that.relativeBase + data[that.index + pos];
+        }
         else{
             return data[that.index + pos];
         }
     }
+
+    function getValue(pos){
+        var result = data[getIndex(pos)];
+        return result ? result : 0;
+    }
     
     function add(){
-        data[getIndex(3)] = data[getIndex(1)] + data[getIndex(2)];
+        data[getIndex(3)] = getValue(1) + getValue(2);
         that.index += 4;
     }
     
     function multiply(){
-        data[getIndex(3)] = data[getIndex(1)] * data[getIndex(2)];
+        data[getIndex(3)] = getValue(1) * getValue(2);
         that.index += 4;
     }
     
@@ -101,35 +113,41 @@ IntCodeComputer.prototype.run = function(){
     }
     
     function addOutput(){
-        output.push(data[getIndex(1)]);
+        output.push(getValue(1));
         that.index += 2;
     }
     
     function jumpIfTrue(){
-        if(data[getIndex(1)] !== 0){
-            that.index = data[getIndex(2)];
+        if(getValue(1) !== 0){
+            that.index = getValue(2);
         } else{
             that.index += 3;
         }
     }
     
     function jumpIfFalse(){
-        if(data[getIndex(1)] === 0){
-            that.index = data[getIndex(2)];
+        if(getValue(1) === 0){
+            that.index = getValue(2);
         } else{
             that.index += 3;
         }
     }
     
     function assignLowerthen(){
-        data[getIndex(3)] = (data[getIndex(1)] < data[getIndex(2)]) ? 1 : 0;
+        data[getIndex(3)] = (getValue(1) < getValue(2)) ? 1 : 0;
         that.index += 4;
     }
     
     function assignEqualTo(){
-        data[getIndex(3)] = (data[getIndex(1)] == data[getIndex(2)]) ? 1 : 0;
+        data[getIndex(3)] = (getValue(1) == getValue(2)) ? 1 : 0;
         that.index += 4;
     } 
+    
+    function offsetRelativeBase(){
+        that.relativeBase += getValue(1);
+
+        that.index += 2;
+    }
     
     return output;
 }
