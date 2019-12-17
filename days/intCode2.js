@@ -24,13 +24,26 @@ class IntCodeComputer{
     run(){
         this.halted = false;
 
-        var operationSize = {
+        var indexAlterationSize = {
             1: 3,
             2: 3,
             3: 1,
             4: 1,
             5: 0,
             6: 0,
+            7: 3,
+            8: 3,
+            9: 1,
+            99:0,
+        }
+
+        var operationSize = {
+            1: 3,
+            2: 3,
+            3: 1,
+            4: 1,
+            5: 2,
+            6: 2,
             7: 3,
             8: 3,
             9: 1,
@@ -77,7 +90,7 @@ class IntCodeComputer{
                 return pointer;
             }));
 
-            this.index += operationSize[opCode];
+            this.index += indexAlterationSize[opCode];
         }
     }    
 }
